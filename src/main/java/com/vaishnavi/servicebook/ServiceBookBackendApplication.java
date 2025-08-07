@@ -1,0 +1,13 @@
+package com.vaishnavi.servicebook;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ServiceBookBackendApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ServiceBookBackendApplication.class, args);
+	}
+
+}
