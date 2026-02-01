@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "app_user") // avoid SQL reserved word 'user'
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,4 +27,5 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "provider_profile_id")
     @JsonManagedReference
-    private ProviderProfile providerProfile;}
+    private ProviderProfile providerProfile;
+}
