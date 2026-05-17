@@ -1,7 +1,8 @@
 package com.vaishnavi.servicebook.controller;
 
-import com.vaishnavi.servicebook.Service.ServiceService;
-import com.vaishnavi.servicebook.Userentity.ServiceEntity;
+import com.vaishnavi.servicebook.dto.ApiResponse;
+import com.vaishnavi.servicebook.service.ServiceService;
+import com.vaishnavi.servicebook.userentity.ServiceEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,28 +18,33 @@ public class ServiceController {
     }
 
     @GetMapping("/all")
-    public List<ServiceEntity> getAll() {
-        return serviceService.getAllServices();
+    public ResponseEntity<ApiResponse<List<ServiceEntity>>> getAll() {
+        return ResponseEntity.ok(ApiResponse.success(serviceService.getAllServices(), "Services fetched successfully"));
     }
 
     @GetMapping("/{id}")
-    public ServiceEntity getById(@PathVariable Long id) {
-        return serviceService.getServiceById(id);
+    public ResponseEntity<ApiResponse<ServiceEntity>> getById(@PathVariable Long id) {
+        return ResponseEntity
+                .ok(ApiResponse.success(serviceService.getServiceById(id), "Service fetched successfully"));
     }
+
     @PostMapping("/add/{providerId}")
-    public ServiceEntity createServiceForProvider(@PathVariable Long providerId,
-                                                  @RequestBody ServiceEntity service) {
-        return serviceService.createServiceForProvider(providerId, service);
+    public ResponseEntity<ApiResponse<ServiceEntity>> createServiceForProvider(@PathVariable Long providerId,
+            @RequestBody ServiceEntity service) {
+        return ResponseEntity.ok(ApiResponse.success(serviceService.createServiceForProvider(providerId, service),
+                "Service created successfully"));
     }
 
     @PutMapping("/{id}")
-    public ServiceEntity update(@PathVariable Long id, @RequestBody ServiceEntity service) {
-        return serviceService.updateService(id, service);
+    public ResponseEntity<ApiResponse<ServiceEntity>> update(@PathVariable Long id,
+            @RequestBody ServiceEntity service) {
+        return ResponseEntity
+                .ok(ApiResponse.success(serviceService.updateService(id, service), "Service updated successfully"));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         serviceService.deleteService(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ApiResponse.success(null, "Service deleted successfully"));
     }
 }

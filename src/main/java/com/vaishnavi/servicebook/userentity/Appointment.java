@@ -1,4 +1,4 @@
-package com.vaishnavi.servicebook.Userentity;
+package com.vaishnavi.servicebook.userentity;
 
 import lombok.*; // make sure this import exists
 import jakarta.persistence.*;

@@ -1,8 +1,9 @@
 package com.vaishnavi.servicebook.controller;
 
-import com.vaishnavi.servicebook.Service.AppointmentService;
+import com.vaishnavi.servicebook.dto.ApiResponse;
+import com.vaishnavi.servicebook.service.AppointmentService;
 import com.vaishnavi.servicebook.dto.BookingRequestDto;
-import com.vaishnavi.servicebook.Userentity.Appointment;
+import com.vaishnavi.servicebook.userentity.Appointment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,14 +21,13 @@ public class BookingController {
     }
 
     @PostMapping("/book")
-    public ResponseEntity<Map<String, Object>> bookAppointment(@RequestBody BookingRequestDto dto) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> bookAppointment(@RequestBody BookingRequestDto dto) {
         Appointment appointment = appointmentService.bookAppointment(
                 dto.getCustomerId(),
                 dto.getProviderId(),
                 dto.getServiceId(),
                 dto.getStartDateTime(),
-                dto.getEndDateTime()
-        );
+                dto.getEndDateTime());
 
         Map<String, Object> response = new HashMap<>();
         response.put("appointmentId", appointment.getId());
@@ -38,6 +38,14 @@ public class BookingController {
         response.put("endDateTime", appointment.getEndDateTime());
         response.put("status", appointment.getStatus());
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(response, "Booking created successfully"));
+    }
+
+    @PostMapping("/{id}/status")
+    public ResponseEntity<ApiResponse<Appointment>> updateStatus(
+            @PathVariable Long id,
+            @RequestParam com.vaishnavi.servicebook.userentity.AppointmentStatus status) {
+        Appointment updated = appointmentService.updateStatus(id, status);
+        return ResponseEntity.ok(ApiResponse.success(updated, "Booking status updated to " + status));
     }
 }

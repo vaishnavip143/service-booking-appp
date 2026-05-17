@@ -1,11 +1,14 @@
 package com.vaishnavi.servicebook.repository;
 
-
-
-import com.vaishnavi.servicebook.Userentity.ProviderProfile;
+import com.vaishnavi.servicebook.userentity.ProviderProfile;
+import com.vaishnavi.servicebook.userentity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProviderProfileRepository extends JpaRepository<ProviderProfile, Long> {
-    ProviderProfile findByUserId(Long userId);
-}
+import java.util.Optional;
 
+public interface ProviderProfileRepository extends JpaRepository<ProviderProfile, Long> {
+
+    Optional<ProviderProfile> findByUser(User user);
+
+    boolean existsByUser(User user);
+}

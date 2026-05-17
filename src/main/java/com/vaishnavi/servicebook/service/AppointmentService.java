@@ -1,7 +1,6 @@
-package com.vaishnavi.servicebook.Service;
+package com.vaishnavi.servicebook.service;
 
-
-import com.vaishnavi.servicebook.Userentity.*;
+import com.vaishnavi.servicebook.userentity.*;
 import com.vaishnavi.servicebook.repository.*;
 
 import org.springframework.stereotype.Service;
@@ -9,33 +8,33 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AppointmentService {
-
     private final AppointmentRepository appointmentRepo;
     private final ProviderProfileRepository providerRepo;
+    private final ServiceRepository serviceRepo;
+    private final NotificationService notificationService;
     private final WorkingHourRepository workingHourRepo;
     private final UserRepository userRepo;
-    private final ServiceRepository serviceRepo;
 
     public AppointmentService(AppointmentRepository appointmentRepo,
-                              ProviderProfileRepository providerRepo,
-                              WorkingHourRepository workingHourRepo,
-                              UserRepository userRepo,
-                              ServiceRepository serviceRepo) {
+            ProviderProfileRepository providerRepo,
+            WorkingHourRepository workingHourRepo,
+            UserRepository userRepo,
+            ServiceRepository serviceRepo,
+            NotificationService notificationService) {
         this.appointmentRepo = appointmentRepo;
         this.providerRepo = providerRepo;
         this.workingHourRepo = workingHourRepo;
         this.userRepo = userRepo;
         this.serviceRepo = serviceRepo;
+        this.notificationService = notificationService;
     }
 
     public Appointment bookAppointment(Long customerId, Long providerId, Long serviceId,
-                                       LocalDateTime startDateTime, LocalDateTime endDateTime) {
+            LocalDateTime startDateTime, LocalDateTime endDateTime) {
 
         // 1️⃣ Fetch related entities
         User customer = userRepo.findById(customerId)
@@ -62,7 +61,9 @@ public class AppointmentService {
         LocalTime startTime = startDateTime.toLocalTime();
         LocalTime endTime = endDateTime.toLocalTime();
         if (startTime.isBefore(wh.getOpenTime()) || endTime.isAfter(wh.getCloseTime())) {
-            throw new RuntimeException("Appointment time is outside working hours");
+            throw new RuntimeException(String.format(
+                    "Appointment time (%s - %s) is outside working hours (%s - %s)",
+                    startTime, endTime, wh.getOpenTime(), wh.getCloseTime()));
         }
 
         // 3️⃣ Create and save appointment
@@ -72,8 +73,24 @@ public class AppointmentService {
         appointment.setService(service);
         appointment.setStartDateTime(startDateTime);
         appointment.setEndDateTime(endDateTime);
-        appointment.setStatus(AppointmentStatus.CONFIRMED); // optional default status
+        appointment.setStatus(AppointmentStatus.PENDING); // Set to PENDING by default
 
+        Appointment savedAppointment = appointmentRepo.save(appointment);
+
+        // 4️⃣ Create notification for provider
+        String message = String.format("%s booked %s for $%.2f",
+                customer.getName(),
+                service.getServiceName(),
+                service.getPrice());
+        notificationService.createNotification(provider, message, savedAppointment.getId());
+
+        return savedAppointment;
+    }
+
+    public Appointment updateStatus(Long id, AppointmentStatus status) {
+        Appointment appointment = appointmentRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+        appointment.setStatus(status);
         return appointmentRepo.save(appointment);
     }
 }

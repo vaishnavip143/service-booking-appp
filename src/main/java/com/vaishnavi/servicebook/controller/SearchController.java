@@ -1,7 +1,8 @@
 package com.vaishnavi.servicebook.controller;
 
-import com.vaishnavi.servicebook.Userentity.ServiceEntity;
-import com.vaishnavi.servicebook.Service.BookingService;
+import com.vaishnavi.servicebook.dto.ApiResponse;
+import com.vaishnavi.servicebook.userentity.ServiceEntity;
+import com.vaishnavi.servicebook.service.BookingService;
 import com.vaishnavi.servicebook.repository.ServiceRepository;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,9 @@ public class SearchController {
     }
 
     @GetMapping("/services")
-    public ResponseEntity<?> searchServices(
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> searchServices(
             @RequestParam String keyword,
-            @RequestParam(required = false) String dateTime
-    ) {
+            @RequestParam(required = false) String dateTime) {
         List<ServiceEntity> allServices = serviceRepo.findByServiceNameContainingIgnoreCase(keyword);
 
         if (dateTime != null) {
@@ -45,6 +45,6 @@ public class SearchController {
             return data;
         }).collect(Collectors.toList());
 
-        return ResponseEntity.ok(results);
+        return ResponseEntity.ok(ApiResponse.success(results, "Search results fetched"));
     }
 }

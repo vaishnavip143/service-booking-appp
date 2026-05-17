@@ -1,5 +1,5 @@
-package com.vaishnavi.servicebook.Service;
-import com.vaishnavi.servicebook.Userentity.*;
+package com.vaishnavi.servicebook.service;
+import com.vaishnavi.servicebook.userentity.*;
 import com.vaishnavi.servicebook.repository.*;
 import org.springframework.stereotype.Service;
 

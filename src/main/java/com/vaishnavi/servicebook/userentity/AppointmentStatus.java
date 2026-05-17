@@ -1,4 +1,4 @@
-package com.vaishnavi.servicebook.Userentity;
+package com.vaishnavi.servicebook.userentity;
 
 public enum AppointmentStatus {
     PENDING,     // Appointment is requested but not yet confirmed

@@ -1,13 +1,14 @@
-package com.vaishnavi.servicebook.Userentity;
+package com.vaishnavi.servicebook.userentity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "service_entity") // ✅ make it match your FK table name
+@Table(name = "services") // ✅ make it match your FK table name
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

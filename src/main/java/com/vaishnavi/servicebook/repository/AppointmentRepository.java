@@ -1,7 +1,7 @@
 package com.vaishnavi.servicebook.repository;
 
 
-import com.vaishnavi.servicebook.Userentity.*;
+import com.vaishnavi.servicebook.userentity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

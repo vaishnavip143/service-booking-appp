@@ -1,7 +1,8 @@
 package com.vaishnavi.servicebook.controller;
 
-import com.vaishnavi.servicebook.Userentity.User;
-import com.vaishnavi.servicebook.Service.UserService;
+import com.vaishnavi.servicebook.dto.ApiResponse;
+import com.vaishnavi.servicebook.userentity.User;
+import com.vaishnavi.servicebook.service.UserService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -18,28 +20,29 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAll() {
-        return userService.getAllUsers();
+    public ResponseEntity<ApiResponse<List<User>>> getAll() {
+        return ResponseEntity.ok(ApiResponse.success(userService.getAllUsers(), "Users fetched successfully"));
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<ApiResponse<User>> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(ApiResponse.success(userService.getUserById(id), "User fetched successfully"));
     }
 
     @PostMapping
-    public User create(@RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<ApiResponse<User>> create(@RequestBody User user) {
+        return ResponseEntity.ok(ApiResponse.success(userService.createUser(user), "User created successfully"));
     }
 
     @PutMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    public ResponseEntity<ApiResponse<User>> update(@PathVariable Long id, @RequestBody User user) {
+        return ResponseEntity.ok(ApiResponse.success(userService.updateUser(id, user), "User updated successfully"));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(ApiResponse.success(null, "User deleted successfully"));
     }
+
 }

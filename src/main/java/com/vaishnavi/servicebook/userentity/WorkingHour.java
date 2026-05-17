@@ -1,7 +1,7 @@
-package com.vaishnavi.servicebook.Userentity;
-
+package com.vaishnavi.servicebook.userentity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalTime;
 
 @Entity
@@ -14,6 +14,7 @@ public class WorkingHour {
     // 👇 A WorkingHour belongs to one ProviderProfile
     @ManyToOne
     @JoinColumn(name = "provider_profile_id")
+    @JsonIgnore
     private ProviderProfile providerProfile; // ✅ must match mappedBy in ProviderProfile
 
     private int dayOfWeek; // 1 = Monday, 7 = Sunday
@@ -70,4 +71,3 @@ public class WorkingHour {
         this.closed = closed;
     }
 }
-

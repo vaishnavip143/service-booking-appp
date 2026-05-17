@@ -1,8 +1,8 @@
-package com.vaishnavi.servicebook.Service;
+package com.vaishnavi.servicebook.service;
 
-import com.vaishnavi.servicebook.Userentity.ProviderProfile;
-import com.vaishnavi.servicebook.Userentity.User;
-import com.vaishnavi.servicebook.Userentity.UserType;
+import com.vaishnavi.servicebook.userentity.ProviderProfile;
+import com.vaishnavi.servicebook.userentity.User;
+import com.vaishnavi.servicebook.userentity.UserType;
 import com.vaishnavi.servicebook.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,6 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }

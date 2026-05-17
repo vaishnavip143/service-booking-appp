@@ -1,10 +1,9 @@
-package com.vaishnavi.servicebook.Service;
+package com.vaishnavi.servicebook.service;
 
-import com.vaishnavi.servicebook.Userentity.ProviderProfile;
-import com.vaishnavi.servicebook.Userentity.ServiceEntity;
+import com.vaishnavi.servicebook.userentity.ProviderProfile;
+import com.vaishnavi.servicebook.userentity.ServiceEntity;
 import com.vaishnavi.servicebook.repository.ProviderProfileRepository;
 import com.vaishnavi.servicebook.repository.ServiceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,7 +28,9 @@ public class ServiceService {
         return serviceRepository.save(service);
     }
 
-
+    public List<ServiceEntity> getServicesByProvider(ProviderProfile provider) {
+        return serviceRepository.findByProvider(provider);
+    }
 
     public List<ServiceEntity> getAllServices() {
         return serviceRepository.findAll();
